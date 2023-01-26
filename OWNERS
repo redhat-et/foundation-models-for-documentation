@@ -1,0 +1,20 @@
+# See the OWNERS docs at https://go.k8s.io/owners
+
+approvers:
+  - chauhankaranraj
+  - michaelclifford
+  - pacospace
+  - tumido
+
+reviewers:
+  - aakankshaduggal
+  - chauhankaranraj
+  - hemajv
+  - isabelizimm
+  - margarethaley
+  - michaelclifford
+  - oindrillac
+  - pacospace
+  - shreyanand
+  - suppathak
+  - tumido
