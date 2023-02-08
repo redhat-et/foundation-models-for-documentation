@@ -11,6 +11,11 @@ Sphinx = "*"
 [packages]
 awscli = "*"
 pypdf2 = "*"
+ipywidgets = "*"
+farm-haystack = {extras = ["colab", "faiss", "preprocessing"], version = "*"}
+ipynb = "*"
+boto3 = "*"
+python-dotenv = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.10"
