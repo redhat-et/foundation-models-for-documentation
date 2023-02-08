@@ -1,53 +1,47 @@
 ---
 repos:
-  - repo: git://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.1.10
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.4.2
     hooks:
       - id: remove-tabs
 
-  - repo: git://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
     hooks:
-      - id: trailing-whitespace
-      - id: check-merge-conflict
-      - id: end-of-file-fixer
-      - id: name-tests-test
+      - id: check-ast
       - id: check-byte-order-marker
       - id: check-case-conflict
       - id: check-docstring-first
       - id: check-json
+      - id: check-merge-conflict
       - id: check-symlinks
-      - id: detect-private-key
-      - id: check-ast
+      - id: check-toml
+      - id: check-yaml
       - id: debug-statements
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: name-tests-test
+      - id: trailing-whitespace
 
-  - repo: git://github.com/pycqa/pydocstyle.git
-    rev: 6.1.1
+  - repo: https://github.com/pycqa/pydocstyle.git
+    rev: 6.3.0
     hooks:
       - id: pydocstyle
 
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
-    hooks:
-      - id: check-toml
-      - id: check-yaml
-      - id: end-of-file-fixer
-      - id: trailing-whitespace
-
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.902
+    rev: v1.0.0
     hooks:
       - id: mypy
         exclude: '^(docs|tasks|tests)|setup\.py'
         args: [--ignore-missing-imports]
 
   - repo: https://github.com/psf/black
-    rev: 21.6b0
+    rev: 23.1.0
     hooks:
       - id: black
 
   - repo: https://github.com/tomcatling/black-nb
-    rev: '0.5.0'
+    rev: '0.7'
     hooks:
       - id: black-nb
 
@@ -58,7 +52,7 @@ repos:
   #     - id: check-manifest
 
   - repo: https://github.com/s-weigand/flake8-nb
-    rev: v0.3.0
+    rev: v0.5.2
     hooks:
       - id: flake8-nb
         additional_dependencies: ['pep8-naming']
