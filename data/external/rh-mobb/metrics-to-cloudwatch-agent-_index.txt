@@ -1,0 +1,112 @@
+This document shows how you can use the AWS Cloud Watch agent to scrape Prometheus endpoints and publish metrics to CloudWatch in a Red Hat OpenShift Container Platform (ROSA) cluster.
+
+It pulls from The AWS documentation for installing the CloudWatch agent to Kubernetes and collections and publishes metrics for the Kubernetes API Server and provides a simple Dashboard to view the results.
+
+Currently the AWS Cloud Watch Agent does not support pulling all metrics from the Prometheus federated endpoint, but the hope is that when it does we can ship all Cluster and User Workload metrics to CloudWatch.
+
+Prerequisites
+
+1.  AWS CLI
+2.  jq
+3.  A ROSA Cluster
+
+Prepare AWS Account
+
+1.  Turn off AWS CLI Paging
+
+        export AWS_PAGER=""
+
+2.  Set some environment variables
+
+    Change these to suit your environment.
+
+        export CLUSTER_NAME=metrics
+        export CLUSTER_REGION=us-east-2
+        export SCRATCH_DIR=/tmp/scratch
+        mkdir -p $SCRATCH_DIR
+
+3.  Create an AWS IAM User for Cloud Watch
+
+        aws iam create-user \
+          --user-name $CLUSTER_NAME-cloud-watch \
+          > $SCRATCH_DIR/aws-user.json
+
+4.  Fetch Access and Secret Keys for IAM User
+
+        aws iam create-access-key \
+          --user-name $CLUSTER_NAME-cloud-watch \
+          > $SCRATCH_DIR/aws-access-key.json
+
+5.  Attach Policy to AWS IAM User
+
+        aws iam attach-user-policy \
+          --user-name $CLUSTER_NAME-cloud-watch \
+          --policy-arn "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+
+Deploy Cloud Watch Prometheus Agent
+
+1.  Create a namespace for Cloud Watch
+
+        oc create namespace amazon-cloudwatch
+
+2.  Download the Cloud Watch Agent Kubernetes manifests
+
+        wget -O $SCRATCH_DIR/cloud-watch.yaml https://raw.githubusercontent.com/rh-mobb/documentation/main/docs/rosa/metrics-to-cloudwatch-agent/cloud-watch.yaml
+
+3.  Update the Cloud Watch Agent Kubernetes manifests
+
+        sed -i "s/__cluster_name__/$CLUSTER_NAME/g" $SCRATCH_DIR/cloud-watch.yaml
+        sed -i "s/__cluster_region__/$CLUSTER_REGION/g" $SCRATCH_DIR/cloud-watch.yaml
+
+4.  Provide AWS Creds to the Cloud Watch Agent
+
+        AWS_ID=`cat $SCRATCH_DIR/aws-access-key.json | jq -r '.AccessKey.AccessKeyId'`
+        AWS_KEY=`cat $SCRATCH_DIR/aws-access-key.json | jq -r '.AccessKey.SecretAccessKey'`
+
+        echo "[AmazonCloudWatchAgent]\naws_access_key_id = $AWS_ID\naws_secret_access_key = $AWS_KEY" \
+          > $SCRATCH_DIR/credentials
+
+        oc --namespace amazon-cloudwatch \
+          create secret generic aws-credentials \
+          --from-file=credentials=$SCRATCH_DIR/credentials
+
+5.  Allow Cloud Watch Agent to run as Root user (inside the container)
+
+        oc -n amazon-cloudwatch adm policy \
+          add-scc-to-user anyuid -z cwagent-prometheus
+
+6.  Apply the Cloud Watch Agent Kubernetes manifests
+
+        oc apply -f $SCRATCH_DIR/cloud-watch.yaml
+
+7.  Check the Pod is running
+
+        oc get pods -n amazon-cloudwatch
+
+    You should see:
+
+        NAME                                  READY   STATUS    RESTARTS   AGE
+        cwagent-prometheus-54cd498c9c-btmjm   1/1     Running   0          60m
+
+Create Sample Dashboard
+
+1.  Download the Sample Dashboard
+
+        wget -O $SCRATCH_DIR/dashboard.json https://raw.githubusercontent.com/rh-mobb/documentation/main/docs/rosa/metrics-to-cloudwatch-agent/dashboard.json
+
+2.  Update the Sample Dashboard
+
+        sed -i "s/__CLUSTER_NAME__/$CLUSTER_NAME/g" $SCRATCH_DIR/dashboard.json
+        sed -i "s/__REGION_NAME__/$CLUSTER_REGION/g" $SCRATCH_DIR/dashboard.json
+
+3.  Browse to https://us-east-2.console.aws.amazon.com/cloudwatch
+
+4.  Create a Dashboard, call it “Kubernetes API Server”
+
+5.  Click Actions->View/edit source
+
+6.  Paste the JSON contents from $SCRATCH_DIR/dashboard.json into the text area
+
+7.  View the dashboard
+
+    [Example AWS Dashboard]
