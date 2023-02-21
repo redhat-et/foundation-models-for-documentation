@@ -11,6 +11,9 @@ Sphinx = "*"
 [packages]
 awscli = "*"
 pypdf2 = "*"
+nltk = "*"
+rouge = "*"
+jiwer = "*"
 
 [requires]
 python_version = "3.8"
