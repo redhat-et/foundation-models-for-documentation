@@ -1,3 +1,0 @@
-If you prefer a more visual medium, you can watch this video on YouTube.
-
-This short video talks about how the STS OIDC flow work in ROSA (Red Hat OpenShift Service on AWS).
