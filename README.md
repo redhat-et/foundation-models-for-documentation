@@ -9,7 +9,7 @@ Large language models are AI systems that are trained on vast amounts of text da
 
 Traditional search engines rely on keywords to find relevant documents. However, this approach has limitations. It can be hard to know which keywords to use, and it may not capture the nuances of natural language. Large language models, on the other hand, can understand natural language queries and take into account the user's intent. This means that users can ask questions in a natural way, and the model will understand what they mean. For example, a user might ask "How many nodes can I have in my ROSA cluster?" and the model can provide the answer with links to relevant documentation.
 
-In this README, we will explore how large language models can be used to improve product documentation search.
+In this README, we will explore how large language models can be used to improve product documentation search. Our goal is to demonstrate the potential for leveraging foundation models to create an interactive, conversational interface that ROSA customers or potential client, can use to access helpful tips and information, in addition to providing comprehensive technical documentation.
 
 ### How Large Language Models Work
 Large language models are based on deep learning algorithms, which enable them to understand and generate natural language. They are trained on massive datasets of text, such as books, articles, and websites. During training, the model learns to recognize patterns in the data and make predictions based on those patterns.
