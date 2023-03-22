@@ -27,8 +27,11 @@ The goal of this repository is to explore the options available for that adaptat
 
 # Repo structure
 
-- `data`: `The data/external` directory contains our initial example ROSA docs for training.
+- `data`: 
+	- `[data/external](data/external)` directory contains our initial example ROSA docs for training.
+	- `[data/processed](data/processed)` directory contains the validation ROSA faq dataset.
 - `notebooks`: The experiment notebooks and their details are in the notebooks [README.](notebooks/README.md)
+- `credentials.env`: This file is used to load environment variables like API keys in the Jupyter notebooks. An example with the format can be found in `[credentials_example.env](credentials_example.env)`
 
 # References
 
