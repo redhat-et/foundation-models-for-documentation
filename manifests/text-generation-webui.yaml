@@ -44,6 +44,18 @@ spec:
     type: ImageChange
   - type: ConfigChange
 ---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: llms
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  volumeMode: Filesystem
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
