@@ -1,52 +1,52 @@
-# Automated Argo workflows
+# OpenShift manifests
 
-If you'd like to automate your Jupyter notebooks using Argo, please use these kustomize manifests. If you follow the steps bellow, your application is fully set and ready to be deployed via Argo CD.
+## Text generation web UI
 
-For a detailed guide on how to adjust your notebooks etc, please consult [documentation](https://github.com/aicoe-aiops/data-science-workflows/blob/master/Automating%20via%20Argo.md)
+The [text-generation-webui.yaml](./text-generation-webui.yaml) manifest builds and deploys [oobabooga's text generation webui](https://github.com/oobabooga/text-generation-webui/), a Gradio app for running Large Language Models.
 
-1. Replace all `<VARIABLE>` mentions with your project name, respective url or any fitting value
-2. Define your automation run structure in the `templates` section of [`cron-workflow.yaml`](./cron-workflow.yml)
-3. Set up `sops`:
+The manifest includes:
 
-   1. Install `go` from your distribution repository
-   2. Setup `GOPATH`
+- a `BuildConfig` to build an image from the repo, using s2i Python
+- a `Deployment` to deploy the built image
+- a `Service` and a `Route` to expose it
 
-      ```bash
-      echo 'export GOPATH="$HOME/.go"' >> ~/.bashrc
-      echo 'export PATH="${GOPATH//://bin:}/bin:$PATH"' >> ~/.bashrc
-      source  ~/.bashrc
-      ```
+### Requirements
 
-   3. Install `sops` from your distribution repository if possible or use [sops GitHub release binaries](https://github.com/mozilla/sops#stable-release)
+#### Persistent storage for the models
 
-   4. Import AICoE-SRE's public key [EFDB9AFBD18936D9AB6B2EECBD2C73FF891FBC7E](https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xefdb9afbd18936d9ab6b2eecbd2c73ff891fbc7e):
+The manifest includes a `PersistentVolumeClaim` (PVC) definition, called `llms`. This is where the models are stored.
 
-      ```bash
-      gpg --keyserver keyserver.ubuntu.com --recv EFDB9AFBD18936D9AB6B2EECBD2C73FF891FBC7E
-      ```
+That PVC must be populated with the models to serve, one per directory.
 
-   5. Import tcoufal's ([A76372D361282028A99F9A47590B857E0288997C](https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa76372d361282028a99f9a47590b857e0288997c)) and mhild's [04DAFCD9470A962A2F272984E5EB0DA32F3372AC](https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x04dafcd9470a962a2f272984e5eb0da32f3372ac) keys (so they can help)
+**NOTE**: the provided `Deployment` is currently hardcoded to start up with `bloom-1b7`, so make sure to at least download that model into the PVC, or adjust the `Deployment` definition according to the models you have.
 
-      ```bash
-      gpg --keyserver keyserver.ubuntu.com --recv A76372D361282028A99F9A47590B857E0288997C  # tcoufal
-      gpg --keyserver keyserver.ubuntu.com --recv 04DAFCD9470A962A2F272984E5EB0DA32F3372AC  # mhild
-      ```
+One way to populate the PVC is to use the [download-model.py script](https://github.com/oobabooga/text-generation-webui/blob/main/download-model.py) from the text-generation-webui repository:
 
-   6. If you'd like to be able to build the manifest on your own as well, please list your GPG key in the [`.sops.yaml` file](.sops.yaml), `pgp` section (add to the comma separated list). With your key present there, you can later generate the full manifests using `kustomize` yourself (`ksops` has to be installed, please follow ksops [guide](https://github.com/viaduct-ai/kustomize-sops#0-verify-requirements).
+1. Wait for your application's Pod to start up
+2. Access your pod (either from the web console or via e.g. `oc rsh`). *Note*: if the pod is failing/restarting due to the lack of pre-loaded models you can use `oc debug` to create a temporary clone of the pod and perform the model download there
+3. `cd models`
+4. `python download-model.py bigscience/bloom-1b7`
 
-4. Create a secret and encrypt it with `sops`:
+Repeat step 4 to download all the models you want. Here are the contents of a sample PVC after a few model downloads:
 
-   ```bash
-   # If you're not already in the `manifest` folder, cd here
-   cd manifests
-   # Mind that `SECRET_NAME` must match the `SECRET_NAME` used in `cron-workflow.yaml`
-   oc create secret generic <SECRET_NAME> \
-     --from-literal=path=<BASE_PATH_WITHIN_CEPH_BUCKET> \
-     --from-literal=bucket=<BUCKET> \
-     --from-literal=access-key-id=<AWS_ACCESS_KEY_ID> \
-     --from-literal=secret-access-key=<AWS_SECRET_ACCESS_KEY> \
-     --dry-run -o yaml |
-   sops --input-type=yaml --output-type=yaml -e /dev/stdin > ceph-creds.yaml
-   ```
+```
+(app-root) sh-4.4$ cd models
+(app-root) sh-4.4$ ls *
+bloom-1b7:
+config.json  model.safetensors  README.md  special_tokens_map.json  tokenizer_config.json  tokenizer.json
 
-Note: You can use the S2I image, that was built by [s2i-custom-notebook](https://github.com/AICoE/s2i-custom-notebook) for this automation. This image is expected to be used by default, therefore the `workingDir` is adjusted to `/opt/app-root/backup`. Please change or remove this settings in case you plan on using different image.
+gpt2:
+config.json  generation_config.json  merges.txt  model.safetensors  README.md  tokenizer.json  vocab.json
+
+lost+found:
+
+opt-1.3b:
+config.json  generation_config.json  LICENSE.md  merges.txt  pytorch_model.bin  README.md  special_tokens_map.json  tokenizer_config.json  vocab.json
+
+opt-2.7b:
+config.json  generation_config.json  merges.txt  pytorch_model.bin  README.md  special_tokens_map.json  tokenizer_config.json  vocab.json
+```
+
+#### GPU
+
+The `Deployment` also assumes that there is a GPU available in the cluster, and will only work if that is available.
