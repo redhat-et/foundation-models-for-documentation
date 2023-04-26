@@ -22,7 +22,7 @@ Red Hat OpenShift Data Science is offered as an add-on managed cloud service to 
 
 OpenShift Data Science is available for purchase worldwide.  It is available in yearly and consumption-based SKUs on the Red Hat price book.  Customers can also use their committed spend to purchase and run the cloud service option of Red Hat OpenShift Data Science directly from the AWS Marketplace ([North America](https://aws.amazon.com/marketplace/pp/prodview-co7uaxdm7qnkq?sr=0-1&ref_=beagle&applicationId=AWSMPContessa), [EMEA](https://aws.amazon.com/marketplace/pp/prodview-fuxkweo2tdmr2)).
 
-Customers can also try out RHODS for free in the [Developer Sandbox](https://developers.redhat.com/developer-sandbox/activities/use-rhods-to-master-nlp) and as part of the OpenShift Dedicated 60-day trial or as part of the [ROSA with RHODS Level Up Program](https://source.redhat.com/groups/public/crosssellupsell/level_up_openshift/level_up_rosa).
+Customers can also try out RHODS for free in the [Developer Sandbox](https://developers.redhat.com/developer-sandbox/activities/use-rhods-to-master-nlp).
 
 ### Is an on-prem option to OpenShift Data Science be offered?
 
@@ -52,7 +52,7 @@ Red Hat OpenShift Data Science currently includes the following technology partn
 
 ### What level SLA will be offered?
 
-Red Hat OpenShift Data Science cloud service follows the uptime SLAs that OpenShift Dedicated and Red Hat OpenShift Service on AWS offers.  This includes a[99.5% SLA](https://docs.google.com/presentation/d/1qjZ8Qhml_Ximzwubh4J792QeZVnWMWeE-11Et8nMbG4/).  The self-managed version does not have any SLAs associated with it.
+Red Hat OpenShift Data Science cloud service follows the uptime SLAs that OpenShift Dedicated and Red Hat OpenShift Service on AWS offers.  This includes a SLA up to 99.5%.  The self-managed version does not have any SLAs associated with it.
 
 ### How does the support model work with the 3rd party ISV tools included in the service?
 
@@ -60,7 +60,7 @@ Red Hat provides level 1 support for the ISVs that have been integrated into the
 
 ### Does Red Hat offer any AI / ML consulting services that complement either the upstream Open Data Hub project or Red Hat OpenShift Data Science?
 
-Red Hat consulting services offer several standard consulting services engagements such as [OpenShift Data Science Platform Engagement](https://red.ht/rhods-platform-engagement),[MLOps Foundation](https://red.ht/mlops-foundation), intelligent app development pilot and data engineering pilot.  Red Hat consulting services can also offer custom engagements.  The Red Hat OpenShift Data Science Platform Engagement allows customers to gain support and assurance from Services Professionals during the integration of  RHODS into their environment to meet their organizational needs. Please contact David Williams ([dww@redhat.com](mailto:dww@redhat.com)) for more information.
+Red Hat consulting services offer several standard consulting services engagements such as OpenShift Data Science Platform Engagement, MLOps Foundation], intelligent app development pilot and data engineering pilot.  Red Hat consulting services can also offer custom engagements.  The Red Hat OpenShift Data Science Platform Engagement allows customers to gain support and assurance from Services Professionals during the integration of  RHODS into their environment to meet their organizational needs.
 
 ## Sales Engagement
 
