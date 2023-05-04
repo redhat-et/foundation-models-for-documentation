@@ -9,6 +9,7 @@ The manifest includes:
 - a `BuildConfig` to build an image from the repo, using s2i Python
 - a `Deployment` to deploy the built image
 - a `Service` and a `Route` to expose it
+- a `Job` to pre-populate storage with one model to begin with
 
 ### Requirements
 
@@ -20,14 +21,17 @@ That PVC must be populated with the models to serve, one per directory.
 
 **NOTE**: the provided `Deployment` is currently hardcoded to start up with `bloom-1b7`, so make sure to at least download that model into the PVC, or adjust the `Deployment` definition according to the models you have.
 
-One way to populate the PVC is to use the [download-model.py script](https://github.com/oobabooga/text-generation-webui/blob/main/download-model.py) from the text-generation-webui repository:
+One way to populate the PVC is to use the [download-model.py script](https://github.com/oobabooga/text-generation-webui/blob/main/download-model.py) from the text-generation-webui repository.
+
+The manitest has a `Job` that will dowload an initial model (`bloom-1b7`) into the PVC. The job uses the same image as the application, where the `download-model.py` script is, so it will not run until the image is built successfully.
+
+Besides the provided `Job`, models can be manually added to the PVC by running the command from the application pod itself:
 
 1. Wait for your application's Pod to start up
 2. Access your pod (either from the web console or via e.g. `oc rsh`). *Note*: if the pod is failing/restarting due to the lack of pre-loaded models you can use `oc debug` to create a temporary clone of the pod and perform the model download there
-3. `cd models`
-4. `python download-model.py bigscience/bloom-1b7`
+3. Run `python download-model.py bigscience/bloom-1b7`
 
-Repeat step 4 to download all the models you want. Here are the contents of a sample PVC after a few model downloads:
+Repeat the last step to download all the models you want. Here are the contents of a sample PVC after a few model downloads:
 
 ```
 (app-root) sh-4.4$ cd models

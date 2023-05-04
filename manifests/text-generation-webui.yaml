@@ -181,3 +181,31 @@ metadata:
 spec:
   lookupPolicy:
     local: false
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+  name: model-download
+spec:
+  template:
+    metadata:
+      annotations:
+        alpha.image.policy.openshift.io/resolve-names: '*'
+    spec:
+      containers:
+      - name: model-download
+        image: text-generation-webui:latest
+        command:
+          - python
+          - download-model.py
+          - bigscience/bloom-1b7
+        volumeMounts:
+        - mountPath: /opt/app-root/src/models
+          name: llms
+      restartPolicy: Never
+      volumes:
+      - name: llms
+        persistentVolumeClaim:
+          claimName: llms
