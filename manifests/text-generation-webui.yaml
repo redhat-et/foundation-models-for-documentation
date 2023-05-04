@@ -90,6 +90,7 @@ spec:
         - python
         - server.py
         - --listen
+        - --api
         - --model
         - bloom-1b7
         image: text-generation-webui:latest
