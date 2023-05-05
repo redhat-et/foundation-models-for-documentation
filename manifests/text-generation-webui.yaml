@@ -92,7 +92,7 @@ spec:
         - --listen
         - --api
         - --model
-        - bloom-1b7
+        - bigscience_bloom-1b7
         image: text-generation-webui:latest
         imagePullPolicy: Always
         name: text-generation-webui
