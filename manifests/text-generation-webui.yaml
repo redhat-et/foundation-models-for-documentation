@@ -128,11 +128,15 @@ metadata:
   name: text-generation-webui
 spec:
   ports:
-  - name: 8080-tcp
+  - name: rest-api
     port: 8080
     protocol: TCP
-    targetPort: 8080
-  - name: 7860-tcp
+    targetPort: 5000
+  - name: stream-api
+    port: 5005
+    protocol: TCP
+    targetPort: 5005
+  - name: web
     port: 7860
     protocol: TCP
     targetPort: 7860
@@ -153,16 +157,56 @@ metadata:
     app.kubernetes.io/part-of: text-generation-webui-app
   name: text-generation-webui
 spec:
-  port:
-    targetPort: 7860-tcp
-  tls:
-    insecureEdgeTerminationPolicy: Redirect
-    termination: edge
   to:
     kind: Service
     name: text-generation-webui
-    weight: 100
-  wildcardPolicy: None
+  port:
+    targetPort: web
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: text-generation-webui
+    app.kubernetes.io/component: text-generation-webui
+    app.kubernetes.io/instance: text-generation-webui
+    app.kubernetes.io/name: text-generation-webui
+    app.kubernetes.io/part-of: text-generation-webui-app
+  name: text-generation-api
+spec:
+  path: "/api"
+  to:
+    kind: Service
+    name: text-generation-webui
+  port:
+    targetPort: rest-api
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: text-generation-webui
+    app.kubernetes.io/component: text-generation-webui
+    app.kubernetes.io/instance: text-generation-webui
+    app.kubernetes.io/name: text-generation-webui
+    app.kubernetes.io/part-of: text-generation-webui-app
+  name: text-generation-stream
+spec:
+  path: "/api/v1/stream"
+  to:
+    kind: Service
+    name: text-generation-webui
+  port:
+    targetPort: stream-api
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
 ---
 apiVersion: image.openshift.io/v1
 kind: ImageStream
