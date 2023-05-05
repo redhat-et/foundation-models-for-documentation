@@ -29,8 +29,7 @@ spec:
     sourceStrategy:
       from:
         kind: ImageStreamTag
-        name: python:3.9-ubi8
-        namespace: openshift
+        name: cuda-base-ubi9:cuda-base-ubi9-py39_2023b_latest
     type: Source
   triggers:
   - generic:
@@ -226,6 +225,35 @@ metadata:
 spec:
   lookupPolicy:
     local: false
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: text-generation-webui
+    app.kubernetes.io/component: text-generation-webui
+    app.kubernetes.io/instance: text-generation-webui
+    app.kubernetes.io/name: text-generation-webui
+    app.kubernetes.io/part-of: text-generation-webui-app
+    app.openshift.io/runtime: python
+    app.openshift.io/runtime-version: 3.9-ubi9
+  name: cuda-base-ubi9
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - name: cuda-base-ubi9-py39_2023b_latest
+      annotations:
+        openshift.io/imported-from: >-
+          quay.io/opendatahub-contrib/workbench-images:cuda-base-ubi9-py39_2023b_latest
+      from:
+        kind: DockerImage
+        name: >-
+          quay.io/opendatahub-contrib/workbench-images:cuda-base-ubi9-py39_2023b_latest
+      importPolicy:
+        importMode: Legacy
+      referencePolicy:
+        type: Source
 ---
 apiVersion: batch/v1
 kind: Job
