@@ -6,5 +6,11 @@ The readme contains description of experiment notebooks in this repository.
 * [langchain-openai.ipynb](langchain-openai.ipynb) explores the [langchain framework](https://python.langchain.com/en/latest/index.html) that helps develop with large language models for various tasks including [question answering](https://langchain.readthedocs.io/en/latest/modules/indexes/chain_examples/question_answering.html).
 * [langchain-pipeline-rosa.ipynb](langchain-pipeline-rosa.ipynb) illustrates the same [LangChain](https://python.langchain.com/en/latest/index.html) worflow of prompt-engineering for ROSA question answering, but using a [Hugging Face](https://huggingface.co) model running locally, instead of accessing a remote model via an API.
 * [langchain-api-client.ipynb](langchain-api-client.ipynb) defines a simple wrapper around a model exposed by the [text-generation-webui](https://github.com/oobabooga/text-generation-webui/) API and uses [LangChain](https://python.langchain.com/en/latest/index.html) to prompt-engineer it for ROSA question answering.
-* [gpu-footprint.ipynb](gpu-footprint.ipynb) computes gpu requirements of models with different number of model parameters.
 * [rosa-demo-open-ai-wfaq.ipynb](rosa-demo-open-ai-wfaq.ipynb) is a general demo of a Question Answering (QA) workflow for ROSA documentation, including vector embeddings for document search and generative answers orchestrated with LangChain. Prompt engineering is also covered. This demo uses the [OpenAI API](https://platform.openai.com/docs/introduction) for embeddings and language modeling.
+
+## Resource utilization
+* [gpu-footprint.ipynb](gpu-footprint.ipynb) computes gpu requirements of models with different number of model parameters.
+
+## Fine tuning
+* [flan-t5-3B-general-tasks](./finetune/Flan-T5-3B/general-tasks.ipynb): finetunes the flan t5 model for sentiment analysis task and text summarization task. 
+* [flan-t5-3B-RosaQA](./finetune/Flan-T5-3B/RosaQA.ipynb): finetunes the flan t5 model for question answering with ROSA service documentation. It then shows before and after finetuning quality of model answers.
