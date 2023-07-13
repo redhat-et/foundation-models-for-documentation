@@ -1,6 +1,8 @@
 apiVersion: mcad.ibm.com/v1beta1
 kind: AppWrapper
 metadata:
+  labels:
+    orderedinstance: m5.xlarge_g4dn.xlarge
   name: finetuneflan
   namespace: default
 spec:
@@ -56,12 +58,29 @@ spec:
             serviceType: ClusterIP
             template:
               spec:
+                affinity:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: finetuneflan
+                          operator: In
+                          values:
+                          - finetuneflan
                 containers:
                 - env:
                   - name: MY_POD_IP
                     valueFrom:
                       fieldRef:
                         fieldPath: status.podIP
+                  - name: RAY_USE_TLS
+                    value: '0'
+                  - name: RAY_TLS_SERVER_CERT
+                    value: /home/ray/workspace/tls/server.crt
+                  - name: RAY_TLS_SERVER_KEY
+                    value: /home/ray/workspace/tls/server.key
+                  - name: RAY_TLS_CA_CERT
+                    value: /home/ray/workspace/tls/ca.crt
                   image: ghcr.io/foundation-model-stack/base:ray2.1.0-py38-gpu-pytorch1.12.0cu116-20221213-193103
                   imagePullPolicy: Always
                   lifecycle:
@@ -88,7 +107,8 @@ spec:
                       cpu: 2
                       memory: 8G
                       nvidia.com/gpu: 0
-          rayVersion: 1.12.0
+                imagePullSecrets: []
+          rayVersion: 2.1.0
           workerGroupSpecs:
           - groupName: small-group-finetuneflan
             maxReplicas: 2
@@ -104,12 +124,29 @@ spec:
                 labels:
                   key: value
               spec:
+                affinity:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: finetuneflan
+                          operator: In
+                          values:
+                          - finetuneflan
                 containers:
                 - env:
                   - name: MY_POD_IP
                     valueFrom:
                       fieldRef:
                         fieldPath: status.podIP
+                  - name: RAY_USE_TLS
+                    value: '0'
+                  - name: RAY_TLS_SERVER_CERT
+                    value: /home/ray/workspace/tls/server.crt
+                  - name: RAY_TLS_SERVER_KEY
+                    value: /home/ray/workspace/tls/server.key
+                  - name: RAY_TLS_CA_CERT
+                    value: /home/ray/workspace/tls/ca.crt
                   image: ghcr.io/foundation-model-stack/base:ray2.1.0-py38-gpu-pytorch1.12.0cu116-20221213-193103
                   lifecycle:
                     preStop:
@@ -128,6 +165,7 @@ spec:
                       cpu: 1
                       memory: 2G
                       nvidia.com/gpu: 1
+                imagePullSecrets: []
                 initContainers:
                 - command:
                   - sh
