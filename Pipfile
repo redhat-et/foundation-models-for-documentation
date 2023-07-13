@@ -37,6 +37,8 @@ py7zr = "*"
 tensorboard = "*"
 peft = "*"
 scipy = "*"
+sentence_transformers = "*"
+
 
 [requires]
 python_version = "3.10"
