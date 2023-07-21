@@ -14,3 +14,6 @@ The readme contains description of experiment notebooks in this repository.
 ## Fine tuning
 * [flan-t5-3B-general-tasks](./finetune/Flan-T5-3B/general-tasks.ipynb): finetunes the flan t5 model for sentiment analysis task and text summarization task. 
 * [flan-t5-3B-RosaQA](./finetune/Flan-T5-3B/RosaQA.ipynb): finetunes the flan t5 model for question answering with ROSA service documentation. It then shows before and after finetuning quality of model answers.
+
+## Evaluation 
+* [QA_evaluation_metrics_demo.ipynb](./QA_evaluation_metrics_demo.ipynb) explores evaluation metrics for LLMs in Question-Answering (QA) tasks. It covers metrics for QA as well as metrics related to model complexity and human evaluation.
