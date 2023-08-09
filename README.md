@@ -33,6 +33,24 @@ The goal of this repository is to explore the options available for that adaptat
 - `notebooks`: The experiment notebooks and their details are in the notebooks [README.](notebooks/README.md)
 - `credentials.env`: This file is used to load environment variables like API keys in the Jupyter notebooks. An example with the format can be found in `[credentials_example.env](credentials_example.env)`
 
+## How to Contribute
+
+We welcome contributions! Follow these steps to get involved:
+
+1. **Create Issues**: Report bugs, request features, or suggest improvements by opening an issue. Provide clear details.
+
+2. **Work on Issues**:
+   - Browse and select an issue to work on.
+   - Assign the issue to yourself.
+   - Create a new branch for your work: `git checkout -b issue-123`
+   - Make changes, commit them: `git commit -m "Description"`
+   - Push changes to your fork: `git push origin issue-123`
+
+3. **Make Pull Requests**:
+   - In your fork, click "Compare & Pull Request" next to your branch.
+   - Fill PR details, referencing the addressed issue.
+   - Submit; maintainers will review.
+
 # References
 
 [Open Source and other Question answering Implementations](https://github.com/redhat-et/foundation-models-for-documentation/issues/9)
