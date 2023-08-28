@@ -24,3 +24,4 @@ The readme contains description of experiment notebooks in this repository.
 ## Feedback
 
 * [Argilla 101](./feedback/argilla_101.ipynb) shows how to connect with and use the Argilla instance on the cluster.
+* ["Collect application feedback using Argilla](./feedback/Collect-application-feedback-using-Argilla.ipynb) shows how to create a feedback dataset and involve annotators for your project.
