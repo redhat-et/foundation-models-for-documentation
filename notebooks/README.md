@@ -20,3 +20,7 @@ The readme contains description of experiment notebooks in this repository.
 
 ## Model Serving
 * [Model Serving with Ray](./model_serving/ray-serve-llm.ipynb) provides a demo for how to serve an LLM on OpenShift using a multi-GPU ray cluster. 
+
+## Feedback
+
+* [Argilla 101](./feedback/argilla_101.ipynb) shows how to connect with and use the Argilla instance on the cluster.
