@@ -1,0 +1,6 @@
+qdrant-client
+torch
+sentence_transformers
+transformers
+langchain
+openai
