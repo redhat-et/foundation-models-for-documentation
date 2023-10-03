@@ -5,3 +5,4 @@ transformers
 langchain
 openai
 python-dotenv
+gradio
