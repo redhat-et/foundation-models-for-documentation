@@ -69,5 +69,5 @@ class DocumentRetrieval:
     def search_candidates(self, user_query, top_k=5):
         # Encode the user query
         candidate_documents = self.vector_store.similarity_search(user_query)
-        
-        return candidate_documents
+        sources = [i.metadata['source'] for i in candidate_documents]
+        return candidate_documents, sources
