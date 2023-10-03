@@ -21,9 +21,6 @@ class DocumentRetrieval:
         # Load the embedding model
         self.embeddings = SentenceTransformerEmbeddings(model_name=self.config["embedding_model_name"])
         
-        # Load dataset
-        self.documents = self.load_documents(self.config["dataset_path"])
-        
         # Load the vector store if it exists
         if os.path.isdir(os.path.join(self.config["vdb_path"],
                                       "collection",
@@ -52,6 +49,8 @@ class DocumentRetrieval:
         
 
     def create_vector_store(self):
+        # Load dataset
+        self.documents = self.load_documents(self.config["dataset_path"])
         # Encode all documents and store their embeddings in a dictionary
         text_splitter = MarkdownTextSplitter(chunk_size=1000,
                                              chunk_overlap=0)

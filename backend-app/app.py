@@ -4,10 +4,6 @@ import gradio as gr
 import argparse
 
 if __name__ == "__main__":
-    # parser = argparse.ArgumentParser(description="Document search and answer generation")
-    # parser.add_argument("--query", required=True, help="Enter your query about the ROSA service")
-    # args = parser.parse_args()
-
     def answer(query):
             config_path = './config.json'
             retrieval = DocumentRetrieval(config_path)
@@ -21,7 +17,7 @@ if __name__ == "__main__":
                                 top_candidates,
                                 PROMPT_TEMPLATE)
             print(f"Final answer: \n {answer}")
-            return answer
+            return answer.strip("\"")
     
     #answer("What is ROSA?")
         
