@@ -11,7 +11,7 @@ The current version uses openai model that requires the OPEN_API_KEY in a creden
 
 ## Running
 Get candidates and final answer by running the app.py file in your terminal with the query as the command line argument.
-`app.py --query "What is ROSA?"`
+`python app.py --query "What is ROSA?"`
 
 You should see something like this:
 ```
