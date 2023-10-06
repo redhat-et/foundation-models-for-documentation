@@ -1,0 +1,7 @@
+{
+    "dataset_path": ".",
+    "vdb_path": ".",
+    "embedding_model_name": "BAAI/bge-large-en",
+    "vdb_collection_name": "rosa_documents",
+    "top_k_candidates": 5
+}

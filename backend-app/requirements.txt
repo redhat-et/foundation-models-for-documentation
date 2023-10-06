@@ -1,0 +1,8 @@
+qdrant-client==1.3.1
+torch
+sentence_transformers
+transformers
+langchain
+openai
+python-dotenv
+gradio
