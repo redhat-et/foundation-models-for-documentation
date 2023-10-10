@@ -1,5 +1,7 @@
 import argilla as rg
 import os
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv("credentials.env"), override=True)
 
 class FeedbackCollection:
     def __init__(self, dataset_name, workspace, create=False):
@@ -19,27 +21,36 @@ class FeedbackCollection:
     def create_dataset_template(self):
         # Create an example feedback dataset schema, and feedback template
         dataset_template = rg.FeedbackDataset(
-        guidelines="Answer the following questions based on your experience",
-        fields=[
-            rg.TextField(name="prompt", title="Human prompt"),
-            rg.TextField(name="documents", title="Candidate documents"),
-            rg.TextField(name="output", title="Generated output", use_markdown=True)
-        ],
-        questions =[
-            rg.RatingQuestion(
-                name="rating",
-                title="Rate the quality of the response:",
-                description="1 = very bad - 5= very good",
-                required=True,
-                values=[1,2,3,4,5]
-            ),
-            rg.TextQuestion(
-                name="corrected-text",
-                title="Provide a correction to the response:",
-                required=False,
-                use_markdown=True
-            )
-        ])
+            guidelines="Please read the feedback questions and answer as accurately as possible. Your answers will be used to improve the application.",
+            fields=[
+                 rg.TextField(name="prompt", title="Human prompt", required=True),
+                 rg.TextField(name="documents", title="Candidate documents"),
+                 rg.TextField(name="output", title="Generated output", use_markdown=True)
+            ],
+            questions=[
+                rg.TextQuestion(
+                    name="document_retrieval_feedback",
+                    title="Are there any missing candidate documents that contain the answer to the query?",
+                    required=True,
+                ),
+                rg.RatingQuestion(
+                    name="response_quality_likert_scale",
+                    title="Rate the quality of the response:",
+                    description="Rate the response's correctness and helpfulness, with 1 indicating it's completely useless/incorrect, and 5 meaning it's entirely helpful/correct.",
+                    values=[1, 2, 3, 4, 5],
+                    required=True,
+                ),
+                rg.TextQuestion(
+                    name="rewrite_response",
+                    title="What should be the exact response of the query? Please modify or recreate the generated answer:",
+                    required=True,
+                ),
+                rg.TextQuestion(
+                    name="additional_comments",
+                    title="Are there any additional comments or suggestions for the application?",
+                    required=False,
+                )
+            ])
         return dataset_template
     
     def add_record(self, prompt, candidates, response):
