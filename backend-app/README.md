@@ -1,5 +1,15 @@
 # How to use
 
+## Openshift Deployment
+* Go to the developer view of your Openshift cluster
+* Select `import from git` option for an automatic deloyment
+* Set git repository to `https://github.com/redhat-et/foundation-models-for-documentation` and the context directory to `backend-app`
+* Click on `submit` and wait for s2i to build the image
+* Check `routes` for the link to the deployed application 
+* Set the api keys in the deployment environment variables
+* Coming soon: yaml files for deployment
+
+# Running locally 
 ## requirements.txt
 Install these requirements in your environment.
 
@@ -9,19 +19,21 @@ Update the config file with the path to the documents, the vector database, the 
 ## credentials.env
 The current version uses openai model that requires the OPEN_API_KEY in a credentials.env file.  
 
-## Running
-Get candidates and final answer by running the app.py file in your terminal with the query as the command line argument.
-`python app.py --query "What is ROSA?"`
+## Running the application
+Run the app.py file in your terminal:
+`python3 app.py`
 
-You should see something like this:
+You will see the application running at `0.0.0.0:8080`. You can change the hostname and the port in the app.py file. 
+
+In the UI, give a query such as "What is ROSA?" to get responses like:
 ```
-Top Candidates:
+Candidate documents:
 
 1: page_content='## How does ROSA use STS?' metadata={'source': '../data/external/rosaworkshop/15-sts_expla
 2:
 ...
 
-Final answer: 
+Answer: 
 
  "ROSA is a fully-managed, turnkey application platform that allows you to focus on delivering value to your customers by building and deploying applications. Red Hat and AWS Site reliability engineering (SRE) experts manage the underlying platform so you do not have to worry about the complexity of infrastructure management. ROSA provides seamless integration with a wide range of AWS compute, database, analytics, machine learning, networking, mobile, and other services to further accelerate the building and delivering of differentiating experiences to your customers."
 ```
