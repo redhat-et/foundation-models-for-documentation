@@ -1,7 +1,8 @@
 from document_retrieval import DocumentRetrieval
-from answer_generation import PROMPT_TEMPLATE, AnswerGeneration
+from answer_generation import PROMPT_TEMPLATE_OPENAI, PROMPT_TEMPLATE_LLAMA, AnswerGeneration
 from feedback import FeedbackCollection
 import gradio as gr
+
 
 if __name__ == "__main__":
     def answer(query):
@@ -17,10 +18,9 @@ if __name__ == "__main__":
 
             # Get answers
             generation = AnswerGeneration(retrieval.vector_store,
-                                          'text-davinci-003')
-            answer = generation.generate(query,
-                                top_candidates,
-                                PROMPT_TEMPLATE)
+                                          'llama2')
+            # If you want to change the model prompt, it is in prompt.py file
+            answer = generation.generate(query, top_candidates)
             answer = answer.strip("\"")
             
             # Add to feedback
