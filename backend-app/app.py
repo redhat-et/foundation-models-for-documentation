@@ -1,5 +1,5 @@
 from document_retrieval import DocumentRetrieval
-from answer_generation import PROMPT_TEMPLATE_OPENAI, PROMPT_TEMPLATE_LLAMA, AnswerGeneration
+from answer_generation import AnswerGeneration
 from feedback import FeedbackCollection
 import gradio as gr
 
