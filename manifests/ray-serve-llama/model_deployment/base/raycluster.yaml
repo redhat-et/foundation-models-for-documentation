@@ -1,0 +1,99 @@
+
+apiVersion: ray.io/v1alpha1
+kind: RayCluster
+metadata:
+  labels:
+  name: llama2service
+  namespace: opendatahub
+spec:
+  enableInTreeAutoscaling: false
+  headGroupSpec:
+    rayStartParams:
+      block: 'true'
+      dashboard-host: 0.0.0.0
+      num-gpus: '0'
+    serviceType: ClusterIP
+    template:
+      spec:
+        containers:
+        - image: quay.io/project-codeflare/ray:2.5.0-py38-cu116
+          imagePullPolicy: Always
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - ray stop
+          name: ray-head
+          ports:
+          - containerPort: 6379
+            name: gcs
+          - containerPort: 8265
+            name: dashboard
+          - containerPort: 10001
+            name: client
+          - containerPort: 8000
+            name: serve
+          resources:
+            limits:
+              cpu: 2
+              memory: 8G
+              nvidia.com/gpu: 0
+            requests:
+              cpu: 2
+              memory: 8G
+              nvidia.com/gpu: 0
+        imagePullSecrets: []
+  rayVersion: 2.5.0
+  workerGroupSpecs:
+  - groupName: small-group-llama2service
+    maxReplicas: 1
+    minReplicas: 1
+    rayStartParams:
+      block: 'true'
+      num-gpus: '1'
+    replicas: 1
+    template:
+      spec:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: node.kubernetes.io/instance-type
+                  operator: In
+                  values:
+                  - g5.2xlarge
+        containers:
+        - image: quay.io/project-codeflare/ray:2.5.0-py38-cu116
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - ray stop
+          name: machine-learning
+          resources:
+            limits:
+              cpu: 4
+              memory: 16G
+              nvidia.com/gpu: 1
+            requests:
+              cpu: 4
+              memory: 16G
+              nvidia.com/gpu: 1
+        imagePullSecrets: []
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - until nslookup $RAY_IP.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local;
+            do echo waiting for myservice; sleep 2; done
+          image: busybox:1.28
+          name: init-myservice
+     
+
+
+

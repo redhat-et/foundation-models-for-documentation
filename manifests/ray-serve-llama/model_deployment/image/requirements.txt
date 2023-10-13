@@ -1,0 +1,7 @@
+ray==2.5.1
+ray[serve]==2.5.1
+requests
+starlette
+transformers
+torch
+pydantic<2
