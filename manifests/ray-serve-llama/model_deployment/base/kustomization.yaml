@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+- raycluster.yaml
+- dashboard_route.yaml
+- service_route.yaml

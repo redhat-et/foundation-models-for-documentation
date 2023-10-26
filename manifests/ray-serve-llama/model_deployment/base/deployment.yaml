@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llama2-server-controller
+  namespace: opendatahub
+  labels:
+    app: llama2-server-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llama2-server-controller
+  template:
+    metadata:
+      labels:
+        app: llama2-server-controller
+    spec:
+      containers:
+      - name: ray-odh-tests
+        image: quay.io/michaelclifford/deep-thought:v0.0.5
+        env:
+        - name: HF_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: huggingface-api-key
+              key: HF_API_KEY
+        - name: RAY_CLIENT_URI
+          value: llama2service-head-svc.opendatahub.svc.cluster.local # add your service name here if different 
+        - name: RAY_DASHBOARD_URI
+          value: "http://ray-dashboard-llama2service-opendatahub.<YOUR-CLUSTER-ADDRESS>" # add your Ray dashboard url if different.
+        - name: MODEL_NAME
+          value: meta-llama/Llama-2-7b-chat-hf # change this to the huggingface model name you want to use.
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/sh
+        - -c
+        - |
+          python serve_llama2.py
+          sleep infinity
+        resources: {}
