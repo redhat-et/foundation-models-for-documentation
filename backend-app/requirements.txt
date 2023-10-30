@@ -6,4 +6,4 @@ langchain
 openai
 python-dotenv
 gradio
-argilla
+argilla==1.16.0
