@@ -24,8 +24,8 @@ if __name__ == "__main__":
             answer = answer.strip("\"")
             
             # Add to feedback
-            fc = FeedbackCollection(dataset_name="rosa-doc-search",
-                                    workspace="alpha-test")
+            fc = FeedbackCollection(dataset_name="rosa-feedback-dataset",
+                                    workspace="rosa-feedback")
             _ = fc.add_record(query, sources, answer)
             
             print(f"Final answer: \n {answer}")
