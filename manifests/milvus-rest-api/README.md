@@ -1,14 +1,29 @@
 # Milvus: Standalone
 
-This repo contains deploment files for a milvus-standalone deployment onto openshift.
+This repo contains instructions for how to deploy milvus standalone onto openshift
 
-The milvus service resouce maps external port 80 to port 19530.
+Milvus Standalone depends on single Minio and Etd containers. 
 
-Milvus service health check external port 443 maps to port 9091
+- Etd is used as a store for metadata. [^1]
+  - Metadata is used by the Proxy and following Coordinator Services
+    - Root Coordinator
+    - Query Coordinator/Service
+    - Data Coordinator/Service
+    - Index Coordinator/Service
+  - listens on port 2379 (default)
+    
+- Minio used as "object storage to persist large-scale files, such as index files and binary logs".[^2]
+  - The below Nodes use Minio in Milvus Standalone.[^3]
+    - Query Node
+    - Data Node
+    - Index Node
+  - listens on port 9091 (default)
+
 
 <h2>Install Dependancies</h2>
 
-- [Kompose](https://kompose.io/installation/) converts Docker compose files to kubernetes resource files
+- Install Kompose
+  - [Kompose](https://kompose.io/installation/) converts Docker compose files to kubernetes resource files
 
 
 ```
@@ -28,7 +43,7 @@ chmod +x kompose
 sudo mv ./kompose /usr/local/bin/kompose
 ```
 
-- Docker compose file for Milvus Standalone
+- Download docker compose file for Milvus Standalone
   
 ```
 mkdir -p milvus-standalone/{docker,deploy} && cd ./milvus-standalone/docker
@@ -303,4 +318,12 @@ curl -s --request POST \
 - [Milvus Standalone](https://milvus.io/docs/install_standalone-docker.md)
 
 - [Milvus Docker compose file](https://github.com/milvus-io/milvus/releases/download/v2.3.3/milvus-standalone-docker-compose.yml)
+
+<h3>End Notes</h3>
+
+[^1]: https://github.com/milvus-io/web-content/blob/master/preview/site/en/adminGuide/meta_storage_operator.md
+
+[^2]: https://github.com/milvus-io/web-content/blob/master/preview/site/en/adminGuide/object_storage_operator.md
+
+[^3]: https://milvus.io/docs/overview.md
 
