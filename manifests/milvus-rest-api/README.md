@@ -4,7 +4,7 @@ This repo contains instructions for how to deploy milvus standalone onto openshi
 
 Milvus Standalone depends on single Minio and Etd containers. 
 
-- Etd is used as a store for metadata. [^1]
+- **Etd** is used as a store for metadata. [^1]
   - Metadata is used by the Proxy and following Coordinator Services
     - Root Coordinator
     - Query Coordinator/Service
@@ -12,7 +12,7 @@ Milvus Standalone depends on single Minio and Etd containers.
     - Index Coordinator/Service
   - listens on port 2379 (default)
     
-- Minio used as "object storage to persist large-scale files, such as index files and binary logs".[^2]
+- **Minio** used as "object storage to persist large-scale files, such as index files and binary logs".[^2]
   - The below Nodes use Minio in Milvus Standalone.[^3]
     - Query Node
     - Data Node
@@ -76,7 +76,9 @@ oc apply -f .
 
 <h2>Example Operations on Milvus</h2>
 
-The following rest api examples assume the below workflow since the vector ids will change depending on if the VectorInsert or VectorMultiInsert path is followed:
+> [!NOTE]
+> The following rest api examples assume the below workflow since the vector ids will change depending on if the
+> VectorInsert or VectorMultiInsert path is followed:
 
 ```mermaid
 graph TD;
