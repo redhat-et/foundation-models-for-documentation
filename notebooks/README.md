@@ -17,6 +17,7 @@ The readme contains description of experiment notebooks in this repository.
 
 ## Evaluation 
 * [QA_evaluation_metrics_demo.ipynb](./QA_evaluation_metrics_demo.ipynb) explores evaluation metrics for LLMs in Question-Answering (QA) tasks. It covers metrics for QA as well as metrics related to model complexity and human evaluation.
+* [retriever-evaluation.ipynb](./retriever-evaluation.ipynb) explores evaluation metrics for document retrieval techniques. 
 
 ## Model Serving
 * [Model Serving with Ray](./model_serving/ray-serve-llm.ipynb) provides a demo for how to serve an LLM on OpenShift using a multi-GPU ray cluster. 
