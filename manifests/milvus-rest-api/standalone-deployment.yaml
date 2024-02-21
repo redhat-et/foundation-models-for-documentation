@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: standalone
+    app: milvus
+  name: standalone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: standalone
+      app: milvus
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/milvus: "true"
+        io.kompose.service: standalone
+        app: milvus
+    spec:
+      containers:
+        - args:
+            - milvus
+            - run
+            - standalone
+          env:
+            - name: ETCD_ENDPOINTS
+              value: etcd:2379
+            - name: MINIO_ADDRESS
+              value: minio:9000
+          image: milvusdb/milvus:v2.3.3
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -f
+                - http://localhost:9091/healthz
+            failureThreshold: 3
+            initialDelaySeconds: 90
+            periodSeconds: 30
+            timeoutSeconds: 20
+          name: milvus-standalone
+          ports:
+            - containerPort: 19530
+              #hostPort: 19530
+              protocol: TCP
+            - containerPort: 9091
+              #hostPort: 9091
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/milvus
+              name: standalone-claim0
+      restartPolicy: Always
+      volumes:
+        - name: standalone-claim0
+          persistentVolumeClaim:
+            claimName: standalone-claim0
+status: {}
